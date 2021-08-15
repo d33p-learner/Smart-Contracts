@@ -2,6 +2,23 @@
  
 pragma solidity >=0.5.0 <0.9.0;
  
+ 
+// this contract will deploy the Auction contract
+contract AuctionCreator{
+    // declaring a dynamic array with addresses of deployed contracts
+    Auction[] public auctions; 
+    
+    // declaring the function that will deploy contract Auction
+    function createAuction() public{
+        
+        // passing msg.sender to the constructor of Auction 
+        Auction newAuction = new Auction(payable(msg.sender)); 
+        auctions.push(newAuction); // adding the address of the instance to the dynamic array
+    }
+}
+ 
+ 
+ 
 contract Auction{
     address payable public owner;
     uint public startBlock;
@@ -20,8 +37,8 @@ contract Auction{
     uint bidIncrement;
     
  
-    constructor(){
-        owner = msg.sender;
+    constructor(address payable eoa){
+        owner = eoa;
         auctionState = State.Running;
         
         startBlock = block.number;
